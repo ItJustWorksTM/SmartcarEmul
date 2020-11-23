@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: libsmartcar_emul-${{ matrix.compiler.c }}-${{ matrix.stdlib_debug }}.so
-          path: godot/gdnative/artifacts/libsmartcar_emul.so
+          path: godot/gdnative/lib/libsmartcar_emul.so
 
     env:
       CC: ${{ matrix.compiler.c }}
@@ -56,14 +56,14 @@ jobs:
         run: |
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
-          dir godot\gdnative\artifacts
+          dir godot\gdnative\lib
 #          cmake --build build --target smartcar_emul_tests
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: libsmartcar_emul.dll
-          path: godot\gdnative\artifacts\smartcar_emul.dll
+          path: godot\gdnative\lib\smartcar_emul.dll
 
   build-macos: # We have to split this one off because AppleClang does not yet support Concepts at all
     runs-on: macos-latest
@@ -126,10 +126,10 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ${{ matrix.platform.name }}
-          path: godot/gdnative/artifacts/${{ matrix.platform.file }}
+          path: godot/gdnative/lib/${{ matrix.platform.file }}
       - name: Debug
         run: |
-          ls godot/gdnative/artifacts
+          ls godot/gdnative/lib
       - name: Cache godot
         uses: actions/cache@v1
         id: cache-godot

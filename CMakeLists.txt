@@ -83,7 +83,7 @@ if (CMAKE_BUILD_TYPE STREQUAL Release)
     set (SCONS_TARGET "release")
 endif()
 
-set (API_JSON ${CMAKE_SOURCE_DIR}/godot/gdnative/artifacts/api.bin)
+set (API_JSON ${CMAKE_SOURCE_DIR}/godot/gdnative/lib/api.bin)
 add_custom_target(godot_headers
         COMMAND scons --cache-force -C ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp platform=${SCONS_PLATFORM} target=${SCONS_TARGET} generate_bindings=yes -j8 use_custom_api_file=yes custom_api_file=${API_JSON}
 )
@@ -145,7 +145,7 @@ catch_discover_tests (smartcar_emul_tests)
 add_custom_command(TARGET smartcar_emul_tests POST_BUILD COMMAND ctest --output-on-failure)
 
 add_custom_command(TARGET smartcar_emul POST_BUILD
-        COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:smartcar_emul>" "${CMAKE_SOURCE_DIR}/godot/gdnative/artifacts/"
-        COMMAND "echo" "copied to: $<TARGET_FILE:smartcar_emul>  ${CMAKE_SOURCE_DIR}/godot/gdnative/artifacts/ ")
+        COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:smartcar_emul>" "${CMAKE_SOURCE_DIR}/godot/gdnative/lib/"
+        COMMAND "echo" "copied to: $<TARGET_FILE:smartcar_emul>  ${CMAKE_SOURCE_DIR}/godot/gdnative/lib/ ")
 
 
