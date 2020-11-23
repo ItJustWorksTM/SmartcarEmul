@@ -57,7 +57,7 @@ jobs:
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
 
-          dir /s
+          dir /S
 
 #          cmake --build build --target smartcar_emul_tests
 
