@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: libsmartcar_emul.dll
-          path: godot\gdnative\artifacts\libsmartcar_emul.dll
+          path: godot\gdnative\artifacts\smartcar_emul.dll
 
   build-macos: # We have to split this one off because AppleClang does not yet support Concepts at all
     runs-on: macos-latest
