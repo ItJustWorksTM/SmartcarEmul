@@ -153,6 +153,7 @@ jobs:
           mv Godot_v3.2.3-stable_linux_headless.64 ../godot
           cd ..
           ls -R
+          pwd
           ./godot --export "${{ matrix.platform.preset }}" export/${{ matrix.platform.export }}
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
