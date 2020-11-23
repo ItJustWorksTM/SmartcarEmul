@@ -58,9 +58,7 @@ jobs:
           cmake --build build --target smartcar_emul
           dir "godot"
           dir" godot\gdnative"
-          dir "godot/gdnative"
           dir "godot\gdnative\artifacts"
-          dir "godot/gdnative/artifacts"
 #          cmake --build build --target smartcar_emul_tests
 
       - name: Upload Artifact
