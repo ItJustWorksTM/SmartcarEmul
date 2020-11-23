@@ -8,8 +8,9 @@ reloadable=true
 [entry]
 
 OSX.64="res://gdnative/artifacts/libsmartcar_emul.dylib"
-Windows.64="res://gdnative/artifacts/libsmartcar_emul.dll"
+Windows.64="res://gdnative/artifacts/smartcar_emul.dll"
 X11.64="res://gdnative/artifacts/libsmartcar_emul.so"
+Server.x86_64="res://gdnative/artifacts/libsmartcar_emul.so"
 
 [dependencies]
 
