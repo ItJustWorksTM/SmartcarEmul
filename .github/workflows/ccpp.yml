@@ -33,7 +33,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: libsmartcar_emul-so-${{ matrix.compiler.c }}
+          name: libsmartcar_emul-${{ matrix.compiler.c }}.so
           path: build/libsmartcar_emul.so
 
     env:
@@ -60,7 +60,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: libsmartcar_emul-dll
+          name: libsmartcar_emul.dll
           path: build/libsmartcar_emul.dll
 
   build-macos: # We have to split this one off because AppleClang does not yet support Concepts at all
@@ -115,13 +115,13 @@ jobs:
       - name: Download dll
         uses: actions/download-artifact@v2
         with:
-          name: libsmartcar_emul-dll
+          name: libsmartcar_emul.dll
           path: godot/gdnative/artifacts
       - name: Download so
         uses: actions/download-artifact@v2
         with:
-          name: libsmartcar_emul-so-clang-10
-          path: godot/gdnative/artifacts
+          name: libsmartcar_emul-clang-10.so
+          path: godot/gdnative/artifacts/libsmartcar_emul.so
       - name: Build
         id: build
         uses: josephbmanley/build-godot-action@v1.4.0
