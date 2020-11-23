@@ -30,18 +30,11 @@ jobs:
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
 #          cmake --build build --target smartcar_emul_tests
-      - name: Build Godot
-        uses: josephbmanley/build-godot-action@v1.4.1
-        with:
-          name: smce
-          preset: Linux
-          debugMode: "true"
-          projectDir: "godot"
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: SMCE Godot Linux
-          path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
+          name: libsmartcar_emul-so
+          path: build/libsmartcar_emul.so
 
     env:
       CC: ${{ matrix.compiler.c }}
@@ -64,18 +57,11 @@ jobs:
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
 #          cmake --build build --target smartcar_emul_tests
-      - name: Build Godot
-        uses: josephbmanley/build-godot-action@v1.4.1
-        with:
-          name: smce
-          preset: Windows
-          debugMode: "true"
-          projectDir: "godot"
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: SMCE Godot Windows
-          path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
+          name: libsmartcar_emul-dll
+          path: build/libsmartcar_emul.dll
 
   build-macos: # We have to split this one off because AppleClang does not yet support Concepts at all
     runs-on: macos-latest
@@ -116,4 +102,37 @@ jobs:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
 
+  godot-export:
+    runs-on: ubuntu-latest
+    needs: [build-ubuntu, build-windows]
+    strategy:
+      matrix:
+        platform: [ Linux, Windows ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Download dll
+        uses: actions/download-artifact@v2
+        with:
+          name: libsmartcar_emul-dll
+          path: godot/gdnative/artifacts
+      - name: Download so
+        uses: actions/download-artifact@v2
+        with:
+          name: libsmartcar_emul-so
+          path: godot/gdnative/artifacts
+      - name: Build
+        id: build
+        uses: josephbmanley/build-godot-action@v1.4.0
+        with:
+          name: example
+          preset: ${{ matrix.platform }}
+          debugMode: "true"
+          projectDir: "godot"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Client - ${{ matrix.platform }}
+          path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
 
