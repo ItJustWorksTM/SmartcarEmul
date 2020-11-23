@@ -790,3 +790,4 @@ $RECYCLE.BIN/
 
 # Godot
 godot/.import
+!godot/gdnative/artifacts
