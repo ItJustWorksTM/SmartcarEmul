@@ -107,27 +107,30 @@ jobs:
     needs: [build-ubuntu, build-windows]
     strategy:
       matrix:
-        platform: [ Linux, Windows ]
+        platform:
+          linux:
+            - name: libsmartcar_emul-clang-10.so
+              file: libsmartcar_emul.so
+              preset: Linux
+          windows:
+            - name: libsmartcar_emul.dll
+              file: libsmartcar_emul.dll
+              preset: Windows
     steps:
       - uses: actions/checkout@v2
         with:
           lfs: true
-      - name: Download dll
+      - name: Download
         uses: actions/download-artifact@v2
         with:
-          name: libsmartcar_emul.dll
-          path: godot/gdnative/artifacts
-      - name: Download so
-        uses: actions/download-artifact@v2
-        with:
-          name: libsmartcar_emul-clang-10.so
-          path: godot/gdnative/artifacts/libsmartcar_emul.so
+          name: ${{ matrix.platform.name }}
+          path: godot/gdnative/artifacts/${{ matrix.platform.file }}
       - name: Build
         id: build
         uses: josephbmanley/build-godot-action@v1.4.0
         with:
           name: example
-          preset: ${{ matrix.platform }}
+          preset: ${{ matrix.platform.preset }}
           debugMode: "true"
           projectDir: "godot"
       - name: Upload Artifact
