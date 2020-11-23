@@ -74,9 +74,18 @@ else()
     message( FATAL_ERROR "Platform not supported" )
 endif()
 
+if (SMCE_STDLIB_DEBUG)
+else ()
+endif ()
+
+set (SCONS_TARGET "debug")
+if (CMAKE_BUILD_TYPE STREQUAL Release)
+    set (SCONS_TARGET "release")
+endif()
+
 set (API_JSON ${CMAKE_SOURCE_DIR}/godot/gdnative/artifacts/api.bin)
 add_custom_target(godot_headers
-        COMMAND scons -C ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp platform=${SCONS_PLATFORM} target=release generate_bindings=yes -j8 use_custom_api_file=yes custom_api_file=${API_JSON}
+        COMMAND scons -C ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp platform=${SCONS_PLATFORM} target=${SCONS_TARGET} generate_bindings=yes -j8 use_custom_api_file=yes custom_api_file=${API_JSON}
 )
 
 add_library(smartcar_emul SHARED)
@@ -84,7 +93,7 @@ add_library(smartcar_emul SHARED)
 target_sources(smartcar_emul PRIVATE src/gdlibrary.cpp src/EmulGlue.cpp src/gdexample.cpp src/util.cpp src/components/AnalogRayCast.cpp)
 target_include_directories(smartcar_emul PUBLIC ${GODOT_HEADERS})
 
-target_link_libraries(smartcar_emul smartcar_emul_deps ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp/bin/libgodot-cpp.${SCONS_PLATFORM}.release.64.${STATIC_LIB_EXT})
+target_link_libraries(smartcar_emul smartcar_emul_deps ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp/bin/libgodot-cpp.${SCONS_PLATFORM}.${SCONS_TARGET}.64.${STATIC_LIB_EXT})
 
 execute_process (
         COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/share" "${CMAKE_BINARY_DIR}/share"
