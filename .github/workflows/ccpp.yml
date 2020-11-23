@@ -124,6 +124,9 @@ jobs:
         with:
           name: ${{ matrix.platform.name }}
           path: godot/gdnative/artifacts/${{ matrix.platform.file }}
+      - name: Debug
+        - run: |
+            ls godot/gdnative/artifacts
       - name: Build
         id: build
         uses: josephbmanley/build-godot-action@v1.4.0
