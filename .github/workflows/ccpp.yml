@@ -33,7 +33,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: libsmartcar_emul-so
+          name: libsmartcar_emul-so-${{ matrix.compiler.c }}
           path: build/libsmartcar_emul.so
 
     env:
@@ -120,7 +120,7 @@ jobs:
       - name: Download so
         uses: actions/download-artifact@v2
         with:
-          name: libsmartcar_emul-so
+          name: libsmartcar_emul-so-clang-10
           path: godot/gdnative/artifacts
       - name: Build
         id: build
@@ -133,6 +133,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Client - ${{ matrix.platform }}
+          name: Godot SMCE ${{ matrix.platform }}
           path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
 
