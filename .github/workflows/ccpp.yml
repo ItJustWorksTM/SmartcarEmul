@@ -33,8 +33,8 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: godot/gdnative/artifacts/libsmartcar_emul-${{ matrix.compiler.c }}.so
-          path: build/libsmartcar_emul.so
+          name: libsmartcar_emul-${{ matrix.compiler.c }}.so
+          path: godot/gdnative/artifacts/libsmartcar_emul.so
 
     env:
       CC: ${{ matrix.compiler.c }}
