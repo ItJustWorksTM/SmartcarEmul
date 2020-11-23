@@ -26,7 +26,7 @@ jobs:
       - name: configure
         run: mkdir build && pushd build && cmake -G Ninja -DSMCE_STDLIB_DEBUG=${{ matrix.stdlib_debug }} .. && popd
       - name: build
-        run: pwd && cmake --build build --target godot_headers && cmake --build build --target smce_bridge
+        run: pwd && cmake --build build --target godot_headers && cmake --build build --target smartcar_emul
 #      - name: test
 #        run: pushd build && ctest && popd
     env:
