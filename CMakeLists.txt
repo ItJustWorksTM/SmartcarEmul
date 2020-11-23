@@ -71,9 +71,8 @@ else()
     message( FATAL_ERROR "Platform not supported" )
 endif()
 
-set (API_JSON ${CMAKE_CURRENT_BINARY_DIR}/api.json)
+set (API_JSON ${CMAKE_SOURCE_DIR}/godot/bin/artifacts/api.bin)
 add_custom_target(godot_headers
-        COMMAND godot --gdnative-generate-json-api ${API_JSON}
         COMMAND scons -C ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp platform=${SCONS_PLATFORM} target=release generate_bindings=yes -j8 use_custom_api_file=yes custom_api_file=${API_JSON}
 )
 

@@ -22,7 +22,7 @@ jobs:
         run: if [ $(echo "$CC" | grep -oP "^clang-") ]; then sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)" llvm.sh $(echo "$CC" | grep -oP "clang-\K(\d+)$"); fi
       - name: Install deps
         run: |
-          sudo apt install libgl1-mesa-dev libglu1-mesa-dev ninja-build godot scons
+          sudo apt install libgl1-mesa-dev libglu1-mesa-dev ninja-build scons
       - name: configure
         run: mkdir build && pushd build && cmake -G Ninja -DSMCE_STDLIB_DEBUG=${{ matrix.stdlib_debug }} .. && popd
       - name: build
