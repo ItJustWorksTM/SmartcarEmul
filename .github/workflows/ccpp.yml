@@ -53,7 +53,7 @@ jobs:
         run: |
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
-          cmake cmake --build build --target smartcar_emul_tests
+          cmake --build build --target smartcar_emul_tests
 
   build-macos: # We have to split this one off because AppleClang does not yet support Concepts at all
     runs-on: macos-latest
@@ -90,7 +90,7 @@ jobs:
           fi
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
-          cmake cmake --build build --target smartcar_emul_tests
+          cmake --build build --target smartcar_emul_tests
 
     env:
       CC: ${{ matrix.compiler.c }}
