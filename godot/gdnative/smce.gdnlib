@@ -3,16 +3,16 @@
 singleton=false
 load_once=true
 symbol_prefix="godot_"
-reloadable=false
+reloadable=true
 
 [entry]
 
-X11.64="res://bin/artifacts/libsmartcar_emul.so"
-Windows.64="res://artifacts/win64/libsmartcar_emul.dll"
-OSX.64="res://bin/artifacts/libsmartcar_emul.dylib"
+OSX.64="res://gdnative/artifacts/libsmartcar_emul.dylib"
+Windows.64="res://gdnative/artifacts/libsmartcar_emul.dll"
+X11.64="res://gdnative/artifacts/libsmartcar_emul.so"
 
 [dependencies]
 
-X11.64=[  ]
-Windows.64=[  ]
 OSX.64=[  ]
+Windows.64=[  ]
+X11.64=[  ]
