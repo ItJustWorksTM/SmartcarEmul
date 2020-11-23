@@ -134,9 +134,10 @@ jobs:
         run: |
           cd godot
           wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_linux_headless.64.zip -O godot.zip
+          wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -O godot_export.zip
           unzip godot.zip
-          ls gdnative
-          ls gdnative/artifacts
+          unzip godot_export.zip
+          mv templates/ ~/.local/share/godot/templates/3.2.3.stable
           ./Godot_v3.2.3-stable_linux_headless.64 --export "${{ matrix.platform.preset }}" export/${{ matrix.platform.export }}
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
