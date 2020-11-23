@@ -145,6 +145,7 @@ jobs:
           wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -O godot_export.zip
           unzip godot.zip
           unzip godot_export.zip
+          mkdir -p ~/.local/share/godot/templates
           mv templates/ ~/.local/share/godot/templates/3.2.3.stable
       - name: Build
         run: |
