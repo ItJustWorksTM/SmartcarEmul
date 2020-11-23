@@ -62,40 +62,27 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-      - uses: actions/cache@v1
-        name: Cache-check Urho3D.tgz
-        id: cache-urho
-        with:
-          path: deps/Urho3D
-          key: ${{ runner.os }}-deps-Urho3D
-      - name: Pull Urho3D.tgz in cache
-        if: steps.cache-urho.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p deps/Urho3D
-          wget -nv --timeout=5 --waitretry=0 --tries=5 --retry-connrefused -O deps/Urho3D/1.7.1.tgz "https://sourceforge.net/projects/urho3d/files/Urho3D/1.7.1/Urho3D-1.7.1-macOS-64bit-SHARED.tar.gz/download"
+
       - name: Install dependencies
         run: |
           brew update
-          brew install --force-bottle coreutils ninja
+          brew install --force-bottle coreutils ninja scons
           if [ $(echo "$CC" | grep -Ei "^clang-") ]; then brew install z3 --force-bottle; brew upgrade --force-bottle llvm; fi
-          tar xf deps/Urho3D/1.7.1.tgz
-          find . -maxdepth 1 -name "Urho3D-*" -exec mv '{}' Urho3D \;
       - name: configure
         run: |
           if [ $(echo "$CC" | grep -Ei "^clang-") ]; then
             export CC=/usr/local/opt/llvm/bin/clang;
             export CXX=/usr/local/opt/llvm/bin/clang++;
           fi
-          mkdir build && pushd build && URHO3D_HOME=$(realpath ../Urho3D) cmake -G Ninja .. && popd
+          mkdir build && pushd build && cmake -G Ninja .. && popd
       - name: build
         run: |
           if [ $(echo "$CC" | grep -Ei "^clang-") ]; then
             export CC=/usr/local/opt/llvm/bin/clang;
             export CXX=/usr/local/opt/llvm/bin/clang++;
           fi
-          cmake --build build
-#      - name: test
-#        run: pushd build && ctest && popd
+          cmake --build build --target godot_headers && cmake --build build --target smartcar_emul
+
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
