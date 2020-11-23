@@ -30,9 +30,19 @@ jobs:
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
 #          cmake --build build --target smartcar_emul_tests
+      - name: Build Godot
+        uses: josephbmanley/build-godot-action@v1.4.1
+        with:
+          name: smce
+          preset: Linux
+          debugMode: "true"
+          projectDir: "godot"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: SMCE Godot Linux
+          path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
 
-#      - name: test
-#        run: pushd build && ctest && popd
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
@@ -54,6 +64,18 @@ jobs:
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
 #          cmake --build build --target smartcar_emul_tests
+      - name: Build Godot
+        uses: josephbmanley/build-godot-action@v1.4.1
+        with:
+          name: smce
+          preset: Windows
+          debugMode: "true"
+          projectDir: "godot"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: SMCE Godot Windows
+          path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
 
   build-macos: # We have to split this one off because AppleClang does not yet support Concepts at all
     runs-on: macos-latest
