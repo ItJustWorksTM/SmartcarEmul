@@ -146,6 +146,6 @@ add_custom_command(TARGET smartcar_emul_tests POST_BUILD COMMAND ctest --output-
 
 add_custom_command(TARGET smartcar_emul POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:smartcar_emul>" "${CMAKE_SOURCE_DIR}/godot/gdnative/artifacts/"
-        COMMAND "echo" "copied to: $<TARGET_FILE:smartcar_emul>")
+        COMMAND "echo" "copied to: $<TARGET_FILE:smartcar_emul>  ${CMAKE_SOURCE_DIR}/godot/gdnative/artifacts/ ")
 
 
