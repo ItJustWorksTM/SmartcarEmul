@@ -26,7 +26,11 @@ jobs:
       - name: configure
         run: mkdir build && pushd build && cmake -G Ninja -DSMCE_STDLIB_DEBUG=${{ matrix.stdlib_debug }} .. && popd
       - name: build
-        run: pwd && cmake --build build --target godot_headers && cmake --build build --target smartcar_emul
+        run: |
+          cmake --build build --target godot_headers
+          cmake --build build --target smartcar_emul
+          cmake --build build --target smartcar_emul_tests
+
 #      - name: test
 #        run: pushd build && ctest && popd
     env:
@@ -46,7 +50,10 @@ jobs:
       - name: configure
         run: mkdir build && cd build && cmake .. && popd
       - name: build
-        run: cmake --build build --target godot_headers && cmake --build build --target smartcar_emul
+        run: |
+          cmake --build build --target godot_headers
+          cmake --build build --target smartcar_emul
+          cmake cmake --build build --target smartcar_emul_tests
 
   build-macos: # We have to split this one off because AppleClang does not yet support Concepts at all
     runs-on: macos-latest
@@ -81,7 +88,9 @@ jobs:
             export CC=/usr/local/opt/llvm/bin/clang;
             export CXX=/usr/local/opt/llvm/bin/clang++;
           fi
-          cmake --build build --target godot_headers && cmake --build build --target smartcar_emul
+          cmake --build build --target godot_headers
+          cmake --build build --target smartcar_emul
+          cmake cmake --build build --target smartcar_emul_tests
 
     env:
       CC: ${{ matrix.compiler.c }}

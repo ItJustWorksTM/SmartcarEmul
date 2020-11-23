@@ -43,8 +43,6 @@ struct VehiclePart {
 class VehicleConfig {
     rapidjson::Document m_doc;
   public:
-    stdfs::path hull_model_file;
-    std::unordered_map<std::string, VehiclePart> parts;
     std::vector<std::pair<std::string, const rapidjson::Value*>> attachments;
 
     /**

@@ -33,34 +33,6 @@ auto smce::VehicleConfig::load(rapidjson::Document doc) -> std::optional<Vehicle
 
     conf.m_doc = std::move(doc);
 
-    if(!conf.m_doc.HasMember("hull_model_file"))
-        return std::nullopt;
-    if(!conf.m_doc["hull_model_file"].IsString())
-        return std::nullopt;
-    conf.hull_model_file = conf.m_doc["hull_model_file"].GetString();
-
-    if(!conf.m_doc.HasMember("parts"))
-        return std::nullopt;
-    if(!conf.m_doc["parts"].IsObject())
-        return std::nullopt;
-    bool valid = true;
-    const auto& jparts = conf.m_doc["parts"];
-    std::for_each(jparts.MemberBegin(), jparts.MemberEnd(), [&](const auto& jval){
-        if(!valid)
-            return;
-
-        auto& el = conf.parts[jval.name.GetString()];
-
-        if(!jval.value.IsObject())
-            return (void)(valid = false);
-
-        if(!jval.value.HasMember("model_file") || !jval.value["model_file"].IsString())
-              return (void)(valid = false);
-        el.model_file = jval.value["model_file"].GetString();
-
-    });
-    if(!valid)
-        return std::nullopt;
 
     if(!conf.m_doc.HasMember("attachments"))
         return std::nullopt;
