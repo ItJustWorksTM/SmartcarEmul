@@ -130,15 +130,26 @@ jobs:
       - name: Debug
         run: |
           ls godot/gdnative/artifacts
-      - name: Build
+      - name: Cache godot
+        uses: actions/cache@v1
+        id: cache-godot
+        with:
+          path: godot/cache
+          key: godot
+      - name: Download godot
+        if: steps.cache-godot.outputs.cache-hit != 'true'
         run: |
-          cd godot
+          mkdir godot/cache
+          cd godot/cache
           wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_linux_headless.64.zip -O godot.zip
           wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -O godot_export.zip
           unzip godot.zip
           unzip godot_export.zip
           mv templates/ ~/.local/share/godot/templates/3.2.3.stable
-          ./Godot_v3.2.3-stable_linux_headless.64 --export "${{ matrix.platform.preset }}" export/${{ matrix.platform.export }}
+      - name: Build
+        run: |
+          cd godot/cache
+          ./Godot_v3.2.3-stable_linux_headless.64 --export "${{ matrix.platform.preset }}" export/${{ matrix.platform.export }} ../project.godot
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
