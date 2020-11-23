@@ -26,18 +26,18 @@
 #include <utility>
 #include <vector>
 #include <rapidjson/document.h>
-#include <Urho3D/Math/Vector3.h>
+//#include <Urho3D/Math/Vector3.h>
 
 namespace smce {
 
 namespace stdfs = std::filesystem;
 
 struct VehiclePart {
-    Urho3D::Vector3 position;
-    Urho3D::Vector3 rotation;
+//    Urho3D::Vector3 position;
+//    Urho3D::Vector3 rotation;
     stdfs::path model_file;
-    Urho3D::Vector3 model_position_offset;
-    Urho3D::Vector3 model_rotation_offset;
+//    Urho3D::Vector3 model_position_offset;
+//    Urho3D::Vector3 model_rotation_offset;
 };
 
 class VehicleConfig {

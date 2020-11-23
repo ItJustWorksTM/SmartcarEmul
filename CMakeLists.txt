@@ -53,12 +53,36 @@ add_subdirectory (thirdparty/range-v3)
 add_custom_target (TestTag)
 include (CTest)
 include (Catch)
-include (SetupUrho3D)
 include (SmartcarLib)
 include (StdPolyfills)
 include (BoostDLL)
 
 add_subdirectory (modules)
+
+set (GODOT_HEADERS thirdparty/godot-cpp/godot_headers thirdparty/godot-cpp/include thirdparty/godot-cpp/include/core thirdparty/godot-cpp/include/gen)
+
+if (WIN32)
+    set (SCONS_PLATFORM "windows")
+elseif (UNIX AND NOT APPLE)
+    set (SCONS_PLATFORM "linux")
+elseif (APPLE)
+    set (SCONS_PLATFORM "osx")
+else()
+    message( FATAL_ERROR "Platform not supported" )
+endif()
+
+set (API_JSON ${CMAKE_CURRENT_BINARY_DIR}/api.json)
+add_custom_target(godot_headers
+        COMMAND godot --gdnative-generate-json-api ${API_JSON}
+        COMMAND scons -C ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp platform=${SCONS_PLATFORM} target=release generate_bindings=yes -j8 use_custom_api_file=yes custom_api_file=${API_JSON}
+)
+
+add_library(smartcar_emul SHARED)
+
+target_sources(smartcar_emul PRIVATE src/gdlibrary.cpp src/EmulGlue.cpp src/gdexample.cpp src/util.cpp src/components/AnalogRayCast.cpp)
+target_include_directories(smartcar_emul PUBLIC ${GODOT_HEADERS})
+
+target_link_libraries(smartcar_emul smartcar_emul_deps ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp/bin/libgodot-cpp.${SCONS_PLATFORM}.release.64.a)
 
 execute_process (
         COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/share" "${CMAKE_BINARY_DIR}/share"
@@ -81,72 +105,32 @@ add_dependencies(TestTag ArduinoRuntime)
 add_library (smartcar_emul_deps INTERFACE)
 target_link_libraries (smartcar_emul_deps INTERFACE
         Boost::dll
-        fmt::fmt
+        fmt::fmt-header-only
         Microsoft.GSL::GSL
         magic_enum::magic_enum
         nameof::nameof
         range-v3::range-v3
-        Urho3D::Urho3D
         stdpolyfills::stdpolyfills
         TryCompile
         ConfigLoader
         RegMoniker)
 
-add_executable (smartcar_emul src/main.cxx)
-target_include_directories (smartcar_emul PRIVATE include thirdparty/inih)
-target_link_libraries (smartcar_emul PRIVATE smartcar_emul_deps Urho3D-rapidjson)
+target_include_directories (smartcar_emul PRIVATE include thirdparty/inih thirdparty/rapidjson/include)
 target_compile_options (smartcar_emul PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/permissive->)
 add_dependencies (smartcar_emul ArduinoRuntime)
-
-target_sources (smartcar_emul PRIVATE
-        include/app/UrhoApp.hxx
-        src/app/UrhoApp.cxx
-        include/components/Registry.hxx
-        include/components/MovableCamera.hxx
-        src/components/MovableCamera.cxx
-        include/UrhoUtility.hxx
-        src/gui/TorchMenu.cxx
-        include/gui/TorchMenu.hxx
-        src/components/EmulGlue.cxx
-        include/components/EmulGlue.hxx
-        include/gui/TorchEvents.hxx
-        include/components/SimpleVehicle.hxx
-        src/components/SimpleVehicle.cxx
-        src/components/Servo.cxx
-        include/components/Servo.hxx
-        src/components/WheelServo.cxx
-        include/components/WheelServo.hxx
-        src/components/PerfectGyroscopeI2CSensor.cxx
-        include/components/PerfectGyroscopeI2CSensor.hxx
-        src/components/LaserCaster.cxx
-        include/components/LaserCaster.hxx
-        src/components/PerfectDistanceI2CSensor.cxx
-        include/components/PerfectDistanceI2CSensor.hxx
-        src/components/PerfectDistanceAnalogSensor.cxx
-        include/components/PerfectDistanceAnalogSensor.hxx)
 
 file (COPY ${CMAKE_SOURCE_DIR}/share DESTINATION ${CMAKE_BINARY_DIR})
 
 set (SMCE_SHARE ${CMAKE_BINARY_DIR}/share/smce)
 
-if (EXISTS ${URHO3D_HOME}/share/Urho3D/Resources)
-    set (URHO3D_RESOURCES ${URHO3D_HOME}/share/Urho3D/Resources)
-else ()
-    set (URHO3D_RESOURCES ${URHO3D_HOME}/bin)
-endif ()
-
-execute_process (
-        COMMAND "${CMAKE_COMMAND}" -E make_directory "${SMCE_SHARE}/Resources"
-        COMMAND "${CMAKE_COMMAND}" -E copy_directory "${URHO3D_RESOURCES}/Autoload" "${SMCE_SHARE}/Resources/Autoload"
-        COMMAND "${CMAKE_COMMAND}" -E copy_directory "${URHO3D_RESOURCES}/CoreData" "${SMCE_SHARE}/Resources/CoreData"
-        COMMAND "${CMAKE_COMMAND}" -E copy_directory "${URHO3D_RESOURCES}/Data" "${SMCE_SHARE}/Resources/Data")
-
 add_executable (smartcar_emul_tests test/sanity.cxx)
 add_dependencies(smartcar_emul_tests TestTag)
 target_link_libraries (smartcar_emul_tests PRIVATE
         smartcar_emul_deps
-        Catch2)
-
+        Catch2
+)
 
 catch_discover_tests (smartcar_emul_tests)
 add_custom_command(TARGET smartcar_emul_tests POST_BUILD COMMAND ctest --output-on-failure)
+
+add_custom_command(TARGET smartcar_emul POST_BUILD COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:smartcar_emul>" "${CMAKE_SOURCE_DIR}/godot/bin/artifacts/")

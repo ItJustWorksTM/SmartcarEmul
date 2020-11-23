@@ -60,6 +60,8 @@ void transpose_integral(const JO& json_obj, typename MpKP::ClassType& c, MpKP mk
 
 namespace smce {
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "readability-container-size-empty"
 [[nodiscard]] std::optional<BoardConf> load(const rapidjson::Document& json_doc) noexcept {
 
     {
@@ -132,6 +134,7 @@ namespace smce {
                                   ADDR_AND_NAME(Spi::cs_pin));
     return ret;
 }
+#pragma clang diagnostic pop
 
 [[nodiscard]] std::optional<BoardConf> load(const stdfs::path& file_location) noexcept {
     rapidjson::Document doc;

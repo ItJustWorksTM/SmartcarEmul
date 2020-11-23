@@ -788,3 +788,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Godot
+godot/.import
