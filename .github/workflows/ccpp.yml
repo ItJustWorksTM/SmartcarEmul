@@ -143,14 +143,17 @@ jobs:
           cd godot/cache
           wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_linux_headless.64.zip -O godot.zip
           wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -O godot_export.zip
+      - name: Build
+        run: |
+          cd godot/cache
           unzip godot.zip
           unzip godot_export.zip
           mkdir -p ~/.local/share/godot/templates
           mv templates/ ~/.local/share/godot/templates/3.2.3.stable
-      - name: Build
-        run: |
-          cd godot/cache
-          ./Godot_v3.2.3-stable_linux_headless.64 --export "${{ matrix.platform.preset }}" export/${{ matrix.platform.export }} ../project.godot
+          mv Godot_v3.2.3-stable_linux_headless.64 ../godot
+          cd ..
+          ls -R
+          ./godot --export "${{ matrix.platform.preset }}" export/${{ matrix.platform.export }}
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
