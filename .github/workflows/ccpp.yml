@@ -108,14 +108,15 @@ jobs:
     strategy:
       matrix:
         platform:
-          linux:
-            - name: libsmartcar_emul-clang-10.so
-              file: libsmartcar_emul.so
-              preset: Linux
-          windows:
-            - name: libsmartcar_emul.dll
-              file: libsmartcar_emul.dll
-              preset: Windows
+          - linux:
+              - name: libsmartcar_emul-clang-10.so
+                  file: libsmartcar_emul.so
+                  preset: Linux
+            windows:
+              - name: libsmartcar_emul.dll
+                file: libsmartcar_emul.dll
+                preset: Windows
+
     steps:
       - uses: actions/checkout@v2
         with:
