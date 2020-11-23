@@ -136,7 +136,7 @@ jobs:
           unzip godot.zip
           ls gdnative
           ls gdnative/artifacts
-          Godot_v3.2.3-stable_linux_headless.64 --export  "${{ matrix.platform.preset }}" export/${{ matrix.platform.export }}
+          ./Godot_v3.2.3-stable_linux_headless.64 --export "${{ matrix.platform.preset }}" export/${{ matrix.platform.export }}
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
