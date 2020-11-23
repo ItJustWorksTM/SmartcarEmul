@@ -44,11 +44,9 @@ jobs:
         run: |
           cmd /C "pip install SCons"
       - name: configure
-        run: mkdir build && cd build && cmake " .. && popd
+        run: mkdir build && cd build && cmake .. && popd
       - name: build
         run: cmake --build build --target godot_headers && cmake --build build --target smartcar_emul
-#      - name: test
-#        run: cd build && ctest
 
   build-macos: # We have to split this one off because AppleClang does not yet support Concepts at all
     runs-on: macos-latest
