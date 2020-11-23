@@ -42,12 +42,11 @@ jobs:
           submodules: recursive
       - name: Install deps
         run: |
-          cmd /C "md Urho3D-build && pushd Urho3D-build && cmake -DURHO3D_SAMPLES=0 -DURHO3D_C++11=1 ../thirdparty/Urho3D && cmake --build . && popd"
-          dir Urho3D-build
+          cmd /C "pip install SCons"
       - name: configure
-        run: mkdir build && cd build && cmake -DURHO3D_HOME_RELATIVE="Urho3D-build" .. && popd
+        run: mkdir build && cd build && cmake " .. && popd
       - name: build
-        run: cmake --build build
+        run: cmake --build build --target godot_headers && cmake --build build --target smartcar_emul
 #      - name: test
 #        run: cd build && ctest
 
