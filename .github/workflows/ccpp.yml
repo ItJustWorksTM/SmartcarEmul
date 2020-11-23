@@ -57,6 +57,12 @@ jobs:
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
 #          cmake --build build --target smartcar_emul_tests
+          ls godot
+          ls godot\gdnative
+          ls godot/gdnative
+          ls godot\gdnative\artifacts
+          ls godot/gdnative/artifacts
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
