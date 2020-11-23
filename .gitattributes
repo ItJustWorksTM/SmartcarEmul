@@ -1,1 +1,2 @@
 *.bin linguist-generated
+godot/gdnative/artifacts/api.bin linguist-generated
