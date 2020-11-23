@@ -33,7 +33,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: libsmartcar_emul-${{ matrix.compiler.c }}.so
+          name: libsmartcar_emul-${{ matrix.compiler.c }}-${{ matrix.stdlib_debug }}.so
           path: godot/gdnative/artifacts/libsmartcar_emul.so
 
     env:
@@ -108,7 +108,7 @@ jobs:
     strategy:
       matrix:
         platform:
-          - name: libsmartcar_emul-clang-10.so
+          - name: libsmartcar_emul-clang-10-0.so
             file: libsmartcar_emul.so
             preset: Linux
           - name: libsmartcar_emul.dll
