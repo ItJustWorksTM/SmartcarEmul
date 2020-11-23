@@ -115,10 +115,11 @@ jobs:
           - name: libsmartcar_emul-clang-10-0.so
             file: libsmartcar_emul.so
             preset: Linux
+            export: smce
           - name: libsmartcar_emul.dll
             file: libsmartcar_emul.dll
             preset: Windows
-
+            export: smce.exe
     steps:
       - uses: actions/checkout@v2
         with:
@@ -132,16 +133,15 @@ jobs:
         run: |
           ls godot/gdnative/artifacts
       - name: Build
-        id: build
-        uses: josephbmanley/build-godot-action@v1.4.0
-        with:
-          name: example
-          preset: ${{ matrix.platform.preset }}
-          debugMode: "true"
-          projectDir: "godot"
+        run: |
+          cd godot
+          wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_linux_headless.64.zip -O godot.zip
+          unzip godot.zip
+          ls gdnative
+          ls gdnative/artifacts
+          Godot_v3.2.3-stable_linux_headless.64 --export  "${{ matrix.platform.preset }}" export/${{ matrix.platform.export }}
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: Godot SMCE ${{ matrix.platform }}
-          path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
-
+          path: godot/export/${{ matrix.platform.export }}
