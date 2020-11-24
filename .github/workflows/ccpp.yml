@@ -2,7 +2,7 @@ name: Emul C++ CI
 on: [push, pull_request]
 jobs:
   setup-godot: # we might want to generate api.js on the fly instead of storing it on the repo
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Cache godot
         uses: actions/cache@v2
@@ -16,7 +16,7 @@ jobs:
       - name: Download godot
         if: steps.cache-godot.outputs.cache-hit != 'true'
         run: |
-          mkdir godot/cache
+          mkdir -p godot/cache
           cd godot/cache
           wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_linux_headless.64.zip -O godot.zip
           wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -O godot_export.zip
@@ -34,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: # No we will not use ICC; MSVC-Wine is feasible on Azure but only on request
+        compiler:
           - c: gcc-9
             cxx: g++-9
           - c: clang-10
@@ -55,6 +55,7 @@ jobs:
         run: mkdir build && pushd build && cmake -G Ninja -DSMCE_STDLIB_DEBUG=${{ matrix.stdlib_debug }} .. && popd
       - name: build
         run: |
+          g++-9 -v
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
 #          cmake --build build --target smartcar_emul_tests
