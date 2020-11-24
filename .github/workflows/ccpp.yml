@@ -143,7 +143,6 @@ jobs:
           locale
           locale -a
           cat /etc/default/locale
-          update-locale LANG=en_US.UTF-8
       - name: Build
         run: |
           cd godot/cache
