@@ -54,8 +54,8 @@ jobs:
         run: mkdir build && cd build && cmake .. && popd
       - name: build
         run: |
-          cmake --build build --target godot_headers
-          cmake --build build --target smartcar_emul
+          cmake --build build --target godot_headers -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --target smartcar_emul -DCMAKE_BUILD_TYPE=Release
           dir godot\gdnative\lib
 #          cmake --build build --target smartcar_emul_tests
 
@@ -161,7 +161,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Godot SMCE Linux
+          name: godot_export
           path: godot/export
     env:
       LANG: en_US.UTF-8
