@@ -137,10 +137,14 @@ jobs:
           cd godot/cache
           wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_linux_headless.64.zip -O godot.zip
           wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -O godot_export.zip
-      - name: Build
+      - name: Set locale
         run: |
           sudo locale-gen en_US.UTF-8
           locale
+          locale -a
+          cat /etc/default/locale
+      - name: Build
+        run: |
           cd godot/cache
           unzip godot.zip
           unzip godot_export.zip
@@ -150,13 +154,14 @@ jobs:
           cd ..
           ls -R
           pwd
-          ./godot --export "Linux" export/linux_smce
-          ./godot --export "Windows" export/windows_smce.exe
+          LANG=en_US.UTF-8 ./godot --export "Linux" export/linux_smce
+          LANG=en_US.UTF-8 ./godot --export "Windows" export/windows_smce.exe
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: Godot SMCE Linux
           path: godot/export
-
+    env:
+      LANG: en_US.UTF-8
 
