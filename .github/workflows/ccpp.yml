@@ -155,6 +155,7 @@ jobs:
           cd ..
           ls -R
           pwd
+          mkdir export
           LANG=en_US.UTF-8 ./godot --export "Linux" export/linux_smce
           LANG=en_US.UTF-8 ./godot --export "Windows" export/windows_smce.exe
 
