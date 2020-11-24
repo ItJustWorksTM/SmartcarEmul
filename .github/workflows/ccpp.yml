@@ -43,6 +43,9 @@ jobs:
 
   build-windows: # This one needs to be split-off because we want to test both GCC and Clang in Ubuntu
     runs-on: windows-latest
+    strategy:
+      matrix:
+        build_type: [Release, Debug]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -51,18 +54,18 @@ jobs:
         run: |
           cmd /C "pip install SCons"
       - name: configure
-        run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && popd
+        run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} .. && popd
       - name: build
         run: |
-          cmake --build build --target godot_headers --config Release
-          cmake --build build --target smartcar_emul --config Release
+          cmake --build build --target godot_headers --config ${{ matrix.build_type }}
+          cmake --build build --target smartcar_emul --config ${{ matrix.build_type }}
           dir godot\gdnative\lib
 #          cmake --build build --target smartcar_emul_tests
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: smartcar_emul.dll
+          name: smartcar_emul-${{ matrix.build_type }}.dll
           path: godot\gdnative\lib\smartcar_emul.dll
 
   build-macos: # We have to split this one off because AppleClang does not yet support Concepts at all
@@ -119,7 +122,7 @@ jobs:
       - name: Download Windows
         uses: actions/download-artifact@v2
         with:
-          name: smartcar_emul.dll
+          name: smartcar_emul-Release.dll
           path: godot/gdnative/lib/
       - name: Debug
         run: |
