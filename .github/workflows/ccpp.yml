@@ -54,8 +54,8 @@ jobs:
         run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && popd
       - name: build
         run: |
-          cmake --build build --target godot_headers
-          cmake --build build --target smartcar_emul
+          cmake --build build --target godot_headers --config Release
+          cmake --build build --target smartcar_emul --config Release
           dir godot\gdnative\lib
 #          cmake --build build --target smartcar_emul_tests
 
