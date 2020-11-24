@@ -80,6 +80,7 @@ endif()
 
 set (API_JSON ${CMAKE_SOURCE_DIR}/godot/gdnative/lib/api.bin)
 add_custom_target(godot_headers
+        COMMAND echo "scons --cache-force -C ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp platform=${SCONS_PLATFORM} target=${SCONS_TARGET} generate_bindings=yes -j8 use_custom_api_file=yes custom_api_file=${API_JSON}"
         COMMAND scons --cache-force -C ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp platform=${SCONS_PLATFORM} target=${SCONS_TARGET} generate_bindings=yes -j8 use_custom_api_file=yes custom_api_file=${API_JSON}
 )
 
