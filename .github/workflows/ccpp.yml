@@ -26,8 +26,8 @@ jobs:
           mv templates/ ~/.local/share/godot/templates/3.2.3.stable
           mv Godot_v3.2.3-stable_linux_headless.64 ../godot
           cd ..
-#          ./godot --gdnative-generate-json-api godot/gdnative/bin/api.json
           rmdir cache
+#          ./godot --gdnative-generate-json-api godot/gdnative/bin/api.json
 
   build-ubuntu:
     runs-on: ubuntu-latest
