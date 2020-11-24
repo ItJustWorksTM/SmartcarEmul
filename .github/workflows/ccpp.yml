@@ -107,17 +107,6 @@ jobs:
   godot-export:
     runs-on: ubuntu-latest
     needs: [build-ubuntu, build-windows]
-    strategy:
-      matrix:
-        platform:
-          - name: libsmartcar_emul-gcc-9-0.so
-            file: libsmartcar_emul.so
-            preset: Linux
-            export: smce
-          - name: smartcar_emul.dll
-            file: smartcar_emul.dll
-            preset: Windows
-            export: smce.exe
     steps:
       - uses: actions/checkout@v2
         with:
@@ -150,6 +139,8 @@ jobs:
           wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -O godot_export.zip
       - name: Build
         run: |
+          sudo locale-gen en_US.UTF-8
+          locale
           cd godot/cache
           unzip godot.zip
           unzip godot_export.zip
