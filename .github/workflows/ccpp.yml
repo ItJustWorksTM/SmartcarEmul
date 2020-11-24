@@ -62,7 +62,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: libsmartcar_emul.dll
+          name: smartcar_emul.dll
           path: godot\gdnative\lib\smartcar_emul.dll
 
   build-macos: # We have to split this one off because AppleClang does not yet support Concepts at all
@@ -110,23 +110,28 @@ jobs:
     strategy:
       matrix:
         platform:
-          - name: libsmartcar_emul-clang-10-0.so
+          - name: libsmartcar_emul-gcc-9-0.so
             file: libsmartcar_emul.so
             preset: Linux
             export: smce
-          - name: libsmartcar_emul.dll
-            file: libsmartcar_emul.dll
+          - name: smartcar_emul.dll
+            file: smartcar_emul.dll
             preset: Windows
             export: smce.exe
     steps:
       - uses: actions/checkout@v2
         with:
           lfs: true
-      - name: Download
+      - name: Download Linux
         uses: actions/download-artifact@v2
         with:
-          name: ${{ matrix.platform.name }}
-          path: godot/gdnative/lib/${{ matrix.platform.file }}
+          name: libsmartcar_emul-gcc-9-0.so
+          path: godot/gdnative/lib/libsmartcar_emul.so
+      - name: Download Windows
+        uses: actions/download-artifact@v2
+        with:
+          name: smartcar_emul.dll
+          path: godot/gdnative/lib/smartcar_emul.dll
       - name: Debug
         run: |
           ls godot/gdnative/lib
@@ -154,9 +159,13 @@ jobs:
           cd ..
           ls -R
           pwd
-          ./godot --export "${{ matrix.platform.preset }}" export/${{ matrix.platform.export }}
+          ./godot --export "Linux" export/linux_smce
+          ./godot --export "Windows" export/windows_smce.exe
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: Godot SMCE ${{ matrix.platform }}
           path: godot/export/${{ matrix.platform.export }}
+smartcar_emul:
+  dll:
