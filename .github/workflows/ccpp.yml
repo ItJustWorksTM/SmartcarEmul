@@ -10,8 +10,8 @@ jobs:
         with:
           path: |
             godot/godot
-#            godot/api.json # later
             ~/.local/share/godot/
+#            godot/api.json # later
           key: godot-linux-323
       - name: Download godot
         if: steps.cache-godot.outputs.cache-hit != 'true'
@@ -69,7 +69,7 @@ jobs:
       CXX: ${{ matrix.compiler.cxx }}
 
 
-  build-windows: # This one needs to be split-off because we want to test both GCC and Clang in Ubuntu
+  build-windows:
     runs-on: windows-latest
     strategy:
       matrix:
