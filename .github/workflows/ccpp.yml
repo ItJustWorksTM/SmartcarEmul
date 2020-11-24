@@ -115,12 +115,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: libsmartcar_emul-gcc-9-0.so
-          path: godot/gdnative/lib/libsmartcar_emul.so
+          path: godot/gdnative/lib/
       - name: Download Windows
         uses: actions/download-artifact@v2
         with:
           name: smartcar_emul.dll
-          path: godot/gdnative/lib/smartcar_emul.dll
+          path: godot/gdnative/lib/
       - name: Debug
         run: |
           ls godot/gdnative/lib
