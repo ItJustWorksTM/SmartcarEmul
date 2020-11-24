@@ -1,6 +1,34 @@
 name: Emul C++ CI
 on: [push, pull_request]
 jobs:
+  setup-godot: # we might want to generate api.js on the fly instead of storing it on the repo
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache godot
+        uses: actions/cache@v2
+        id: cache-godot
+        with:
+          path: |
+            godot/godot
+#            godot/api.json # later
+            ~/.local/share/godot/
+          key: godot-linux-323
+      - name: Download godot
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          mkdir godot/cache
+          cd godot/cache
+          wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_linux_headless.64.zip -O godot.zip
+          wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -O godot_export.zip
+          unzip godot.zip
+          unzip godot_export.zip
+          mkdir -p ~/.local/share/godot/templates
+          mv templates/ ~/.local/share/godot/templates/3.2.3.stable
+          mv Godot_v3.2.3-stable_linux_headless.64 ../godot
+          cd ..
+#          ./godot --gdnative-generate-json-api godot/gdnative/bin/api.json
+          rmdir cache
+
   build-ubuntu:
     runs-on: ubuntu-latest
     strategy:
@@ -68,7 +96,7 @@ jobs:
           name: smartcar_emul-${{ matrix.build_type }}.dll
           path: godot\gdnative\lib\smartcar_emul.dll
 
-  build-macos: # We have to split this one off because AppleClang does not yet support Concepts at all
+  build-macos:
     runs-on: macos-latest
     strategy:
       fail-fast: false
@@ -80,36 +108,26 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-
       - name: Install dependencies
         run: |
           brew update
-          brew install --force-bottle coreutils ninja scons
-          if [ $(echo "$CC" | grep -Ei "^clang-") ]; then brew install z3 --force-bottle; brew upgrade --force-bottle llvm; fi
+          brew install --force-bottle coreutils ninja scons z3 llvm
       - name: configure
         run: |
-          if [ $(echo "$CC" | grep -Ei "^clang-") ]; then
-            export CC=/usr/local/opt/llvm/bin/clang;
-            export CXX=/usr/local/opt/llvm/bin/clang++;
-          fi
+          export CC=/usr/local/opt/llvm/bin/clang;
+          export CXX=/usr/local/opt/llvm/bin/clang++;
           mkdir build && pushd build && cmake -G Ninja .. && popd
       - name: build
         run: |
-          if [ $(echo "$CC" | grep -Ei "^clang-") ]; then
-            export CC=/usr/local/opt/llvm/bin/clang;
-            export CXX=/usr/local/opt/llvm/bin/clang++;
-          fi
+          export CC=/usr/local/opt/llvm/bin/clang;
+          export CXX=/usr/local/opt/llvm/bin/clang++;
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
 #          cmake --build build --target smartcar_emul_tests
 
-    env:
-      CC: ${{ matrix.compiler.c }}
-      CXX: ${{ matrix.compiler.cxx }}
-
   godot-export:
     runs-on: ubuntu-latest
-    needs: [build-ubuntu, build-windows]
+    needs: [build-ubuntu, build-windows, setup-godot]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -132,35 +150,12 @@ jobs:
         id: cache-godot
         with:
           path: godot/cache
-          key: godot
-      - name: Download godot
-        if: steps.cache-godot.outputs.cache-hit != 'true'
-        run: |
-          mkdir godot/cache
-          cd godot/cache
-          wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_linux_headless.64.zip -O godot.zip
-          wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -O godot_export.zip
-      - name: Set locale
-        run: |
-          sudo locale-gen en_US.UTF-8
-          locale
-          locale -a
-          cat /etc/default/locale
+          key: godot-linux-323
       - name: Build
         run: |
-          cd godot/cache
-          unzip godot.zip
-          unzip godot_export.zip
-          mkdir -p ~/.local/share/godot/templates
-          mv templates/ ~/.local/share/godot/templates/3.2.3.stable
-          mv Godot_v3.2.3-stable_linux_headless.64 ../godot
-          cd ..
-          ls -R
-          pwd
           mkdir export
-          LANG=en_US.UTF-8 ./godot --export "Linux" export/linux_smce
-          LANG=en_US.UTF-8 ./godot --export "Windows" export/windows_smce.exe
-
+          ./godot --export "Linux" export/linux_smce
+          ./godot --export "Windows" export/windows_smce.exe
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
