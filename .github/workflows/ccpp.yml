@@ -165,7 +165,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Godot SMCE ${{ matrix.platform }}
-          path: godot/export/${{ matrix.platform.export }}
-smartcar_emul:
-  dll:
+          name: Godot SMCE Linux
+          path: godot/export
+
+
