@@ -153,6 +153,7 @@ jobs:
           key: godot-linux-323
       - name: Build
         run: |
+          cd godot
           mkdir export
           ./godot --export "Linux" export/linux_smce
           ./godot --export "Windows" export/windows_smce.exe
