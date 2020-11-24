@@ -61,6 +61,16 @@ add_subdirectory (modules)
 
 set (GODOT_HEADERS thirdparty/godot-cpp/godot_headers thirdparty/godot-cpp/include thirdparty/godot-cpp/include/core thirdparty/godot-cpp/include/gen)
 
+if (WIN32)
+    set (SCONS_PLATFORM "windows")
+elseif (UNIX AND NOT APPLE)
+    set (SCONS_PLATFORM "linux")
+elseif (APPLE)
+    set (SCONS_PLATFORM "osx")
+else()
+    message( FATAL_ERROR "Platform not supported" )
+endif()
+
 if (SMCE_STDLIB_DEBUG)
 else ()
 endif ()
