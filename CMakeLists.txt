@@ -61,19 +61,6 @@ add_subdirectory (modules)
 
 set (GODOT_HEADERS thirdparty/godot-cpp/godot_headers thirdparty/godot-cpp/include thirdparty/godot-cpp/include/core thirdparty/godot-cpp/include/gen)
 
-if (WIN32)
-    set (SCONS_PLATFORM "windows")
-    set (STATIC_LIB_EXT "lib")
-elseif (UNIX AND NOT APPLE)
-    set (SCONS_PLATFORM "linux")
-    set (STATIC_LIB_EXT "a")
-elseif (APPLE)
-    set (SCONS_PLATFORM "osx")
-    set (STATIC_LIB_EXT "a")
-else()
-    message( FATAL_ERROR "Platform not supported" )
-endif()
-
 if (SMCE_STDLIB_DEBUG)
 else ()
 endif ()
@@ -93,7 +80,7 @@ add_library(smartcar_emul SHARED)
 target_sources(smartcar_emul PRIVATE src/gdlibrary.cpp src/EmulGlue.cpp src/gdexample.cpp src/util.cpp src/components/AnalogRayCast.cpp)
 target_include_directories(smartcar_emul PUBLIC ${GODOT_HEADERS})
 
-target_link_libraries(smartcar_emul smartcar_emul_deps ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp/bin/libgodot-cpp.${SCONS_PLATFORM}.${SCONS_TARGET}.64.${STATIC_LIB_EXT})
+target_link_libraries(smartcar_emul smartcar_emul_deps ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp/bin/libgodot-cpp.${SCONS_PLATFORM}.${SCONS_TARGET}.64${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 execute_process (
         COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/share" "${CMAKE_BINARY_DIR}/share"
