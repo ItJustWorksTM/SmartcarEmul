@@ -71,9 +71,7 @@ else()
     message( FATAL_ERROR "Platform not supported" )
 endif()
 
-if (SMCE_STDLIB_DEBUG)
-else ()
-endif ()
+
 
 set (SCONS_TARGET "debug")
 if (CMAKE_BUILD_TYPE STREQUAL Release)

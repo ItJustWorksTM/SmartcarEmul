@@ -51,11 +51,11 @@ jobs:
         run: |
           cmd /C "pip install SCons"
       - name: configure
-        run: mkdir build && cd build && cmake .. && popd
+        run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && popd
       - name: build
         run: |
-          cmake --build build --target godot_headers -DCMAKE_BUILD_TYPE=Release
-          cmake --build build --target smartcar_emul -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --target godot_headers
+          cmake --build build --target smartcar_emul
           dir godot\gdnative\lib
 #          cmake --build build --target smartcar_emul_tests
 
