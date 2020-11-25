@@ -27,7 +27,8 @@ jobs:
           mv Godot_v3.2.3-stable_linux_headless.64 ../godot
           cd ..
           mkdir -p gdnative/bin
-          ./godot --gdnative-generate-json-api gdnative/bin/api.json
+#          Just sigabrts for now ;)
+#          ./godot --gdnative-generate-json-api gdnative/bin/api.json
 
   build-ubuntu:
     runs-on: ubuntu-20.04
