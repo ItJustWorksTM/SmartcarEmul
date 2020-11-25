@@ -152,11 +152,11 @@ jobs:
           path: godot/godot
           key: godot-linux-323
       - name: Cache godot
-          uses: actions/cache@v1
-          id: cache-godot
-          with:
-            path: ~/.local/share/godot/
-            key: godot-linux-export-323
+        uses: actions/cache@v1
+        id: cache-godot
+        with:
+          path: ~/.local/share/godot/
+          key: godot-linux-export-323
       - name: Build
         run: |
           cd godot
