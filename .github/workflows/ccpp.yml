@@ -11,7 +11,6 @@ jobs:
           path: |
             godot/godot
              ~/.local/share/godot/
-            godot/gdnative/bin/api.json
           key: godot-linux-323
       - name: Download godot
         if: steps.cache-godot.outputs.cache-hit != 'true'
