@@ -5,17 +5,13 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Cache godot
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         id: cache-godot
         with:
-          path: godot/godot
+          path: |
+            godot/godot
+             ~/.local/share/godot/
           key: godot-linux-323
-      - name: Cache godot
-        uses: actions/cache@v1
-        id: cache-godot
-        with:
-          path: ~/.local/share/godot/
-          key: godot-linux-export-323
       - name: Download godot
         if: steps.cache-godot.outputs.cache-hit != 'true'
         run: |
@@ -146,17 +142,13 @@ jobs:
           name: smartcar_emul-Release.dll
           path: godot/gdnative/lib/
       - name: Cache godot
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         id: cache-godot
         with:
-          path: godot/godot
+          path: |
+            godot/godot
+             ~/.local/share/godot/
           key: godot-linux-323
-      - name: Cache godot
-        uses: actions/cache@v1
-        id: cache-godot
-        with:
-          path: ~/.local/share/godot/
-          key: godot-linux-export-323
       - name: Build
         run: |
           cd godot
