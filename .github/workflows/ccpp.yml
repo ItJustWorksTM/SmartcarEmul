@@ -150,7 +150,6 @@ jobs:
         id: cache-godot
         with:
           path: godot/godot
-            ~/.local/share/godot/
           key: godot-linux-323
       - name: Cache godot
           uses: actions/cache@v1
