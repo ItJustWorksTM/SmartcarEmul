@@ -11,6 +11,7 @@ jobs:
           path: |
             godot/godot
              ~/.local/share/godot/
+            godot/gdnative/bin/api.json
           key: godot-linux-323
       - name: Download godot
         if: steps.cache-godot.outputs.cache-hit != 'true'
@@ -25,7 +26,8 @@ jobs:
           mv templates/ ~/.local/share/godot/templates/3.2.3.stable
           mv Godot_v3.2.3-stable_linux_headless.64 ../godot
           cd ..
-#          ./godot --gdnative-generate-json-api godot/gdnative/bin/api.json
+          mkdir -p gdnative/bin
+          ./godot --gdnative-generate-json-api gdnative/bin/api.json
 
   build-ubuntu:
     runs-on: ubuntu-20.04
