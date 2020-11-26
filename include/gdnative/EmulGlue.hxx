@@ -101,7 +101,7 @@ class EmulGlue : public Node {
         auto size = ubus.rx.size();
         ubus.rx.resize(ubus.rx.size() + view.size());
 
-        std::memcpy(&*ubus.rx.begin() + size, view.begin(), view.size());
+        std::memcpy(&*ubus.rx.begin() + size, view.data(), view.size());
         return true;
     }
 
