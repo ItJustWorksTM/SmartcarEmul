@@ -70,5 +70,7 @@ down={
 
 [rendering]
 
-threads/thread_model=2
+quality/intended_usage/framebuffer_allocation=3
+quality/subsurface_scattering/quality=0
+quality/depth/hdr=false
 environment/default_environment="res://default_env.tres"

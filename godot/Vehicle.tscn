@@ -67,12 +67,6 @@ transform = Transform( -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0, 1, 0, 0, 0
 mesh = SubResource( 3 )
 material/0 = null
 
-[node name="OmniLight" type="OmniLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.395817, -0.725834, 0 )
-light_color = Color( 0.870588, 0.0509804, 0.941176, 1 )
-light_energy = 1.35
-light_indirect_energy = 2.28
-
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform( -8.14603e-07, 0, 1, 0, 1, 0, -5, 0, -1.62921e-07, 3.13736, 0.0193951, 0 )
 texture = ExtResource( 1 )

@@ -96,10 +96,8 @@ endif()
 target_sources(smartcar_emul PRIVATE
         src/gdlibrary.cpp
         src/EmulGlue.cpp
-        src/gdexample.cpp
         src/util.cpp
         src/components/AnalogRayCast.cpp
-        src/Refr.cpp
 )
 target_include_directories(smartcar_emul PUBLIC ${GODOT_HEADERS})
 

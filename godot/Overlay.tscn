@@ -5,25 +5,45 @@
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = 1.1225
+margin_bottom = 1.1225
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Panel" type="Panel" parent="."]
-margin_left = 130.0
-margin_top = 55.0
-margin_right = 636.0
-margin_bottom = 260.0
+margin_right = 1024.0
+margin_bottom = 126.0
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="LineEdit" type="LineEdit" parent="."]
-margin_left = 156.0
-margin_top = 173.0
-margin_right = 598.0
-margin_bottom = 212.0
+[node name="LineEdit" type="LineEdit" parent="Panel"]
+margin_left = 8.0
+margin_top = 79.0
+margin_right = 1016.0
+margin_bottom = 118.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Label" type="Label" parent="."]
-margin_left = 160.02
-margin_top = 63.0818
-margin_right = 428.02
-margin_bottom = 152.082
+[node name="Label" type="Label" parent="Panel"]
+margin_left = 24.0
+margin_top = 15.0
+margin_right = 1000.0
+margin_bottom = 71.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="Panel"]
+margin_left = 944.0
+margin_top = 134.878
+margin_right = 1009.0
+margin_bottom = 154.878
+text = "Compile"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="Panel/Button" to="." method="_on_Button_pressed"]

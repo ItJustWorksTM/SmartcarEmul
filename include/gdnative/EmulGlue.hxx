@@ -12,7 +12,6 @@
 #include <VehicleConf.hxx>
 #include <fmt/format.h>
 #include <utility.hxx>
-#include "gdnative/Refr.hxx"
 #include "gdnative/util.hxx"
 #include "BoardConf.hxx"
 #include "Toolchain.hxx"
@@ -30,24 +29,19 @@ class EmulGlue : public Node {
     void compile(const smce::SketchSource& ino_path, const std::filesystem::path& smce_home);
 
   public:
-    Ref<Refr> throwme = nullptr;
     std::pair<BoardData, BoardInfo> board;
     enum class CompileResult { SUCCESS, FAILURE };
     static void _register_methods() {
-        register_method("is_board_available", &EmulGlue::is_board_available);
-
         register_method("_process", &EmulGlue::_process);
         register_method("_ready", &EmulGlue::_ready);
+        register_method("is_board_available", &EmulGlue::is_board_available);
         register_method("start_compile", &EmulGlue::start_compile);
-        register_method("get_self", &EmulGlue::get_self);
-        register_method("do_something", &EmulGlue::do_something);
         register_method("write_uart", &EmulGlue::write_uart);
         register_method("write_uart_n", &EmulGlue::write_uart_n);
         register_method("get_uart_buf_n", &EmulGlue::get_uart_buf_n);
 
 
         register_signal<EmulGlue>("compile_done", "successful", GODOT_VARIANT_TYPE_BOOL, "message", GODOT_VARIANT_TYPE_STRING);
-        register_property("throw", &EmulGlue::set_throw, &EmulGlue::get_throw, Ref<Refr>(nullptr));
     }
 
     void _init();
@@ -56,19 +50,6 @@ class EmulGlue : public Node {
     bool start_compile(const String ino_path);
 
     ~EmulGlue() { Godot::print("glue died"); }
-    void talk() { Godot::print("hello from the singleton!"); }
-
-    void set_throw(Ref<Refr> x) { Godot::print_error("sucks", "to", "be", 123); }
-
-    Ref<Refr> get_throw() {
-        if (throwme.is_null())
-            throwme = Ref(Refr::_new());
-        return throwme;
-    }
-
-    EmulGlue* get_self() { return nullptr; }
-
-    void do_something(uint8_t byte) {}
 
     bool is_board_available() { return ino_runtime.is_running(); }
 
