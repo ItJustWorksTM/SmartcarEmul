@@ -90,7 +90,7 @@ add_custom_target(godot_headers
 
 if (UNIX)
     set (RELEASE_LINKER_OPTIONS -s)
-    target_link_options(smartcar_emul PUBLIC "$<$<CONFIG:DEBUG>:${RELEASE_LINKER_OPTIONS}>")
+    target_link_options(smartcar_emul PUBLIC ${RELEASE_LINKER_OPTIONS})
 endif()
 
 target_sources(smartcar_emul PRIVATE
