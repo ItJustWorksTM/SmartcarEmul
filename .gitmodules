@@ -10,9 +10,6 @@
 [submodule "thirdparty/magic_enum"]
 	path = thirdparty/magic_enum
 	url = https://github.com/Neargye/magic_enum
-[submodule "thirdparty/Urho3D"]
-	path = thirdparty/Urho3D
-	url = https://github.com/urho3d/Urho3D
 [submodule "thirdparty/GSL"]
 	path = thirdparty/GSL
 	url = https://github.com/microsoft/GSL
