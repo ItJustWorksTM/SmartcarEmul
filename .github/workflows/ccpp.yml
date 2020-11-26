@@ -125,6 +125,11 @@ jobs:
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
 #          cmake --build build --target smartcar_emul_tests
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: libsmartcar_emul-${{ matrix.compiler.c }}.dylib
+          path: godot\gdnative\lib\libsmartcar_emul.dylib
 
   godot-export:
     runs-on: ubuntu-20.04
