@@ -66,7 +66,7 @@ struct SketchRuntime {
     bool set_sketch_and_car(SketchObject, BoardData&, const BoardInfo&) noexcept; // Should we really pass the data instead of the config?
     bool clear();
 
-    [[nodiscard]] constexpr bool is_running() noexcept { return status == Status::running; }
+    [[nodiscard]] constexpr bool is_running() const noexcept { return status == Status::running; }
 
     template <class Invocable, class... Args>
     void interrupt(Invocable&& invocable, Args&&... args) requires std::invocable<Invocable, decltype(args)...> {

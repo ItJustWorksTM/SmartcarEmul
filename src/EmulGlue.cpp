@@ -6,15 +6,6 @@ void EmulGlue::_init() { Godot::print("EmulGlue initted"); }
 
 void EmulGlue::_ready() { Godot::print("EmulGlue ready"); }
 
-// TODO: move out of class
-void EmulGlue::compile(const smce::SketchSource& ino_path, const std::filesystem::path& smce_home) {
-    compile_tr = std::async([&, ino_path, smce_home]() {
-        auto ret = smce::compile_sketch(ino_path, smce_home);
-        compile_done = true;
-        return ret;
-    });
-}
-
 void EmulGlue::_process(float delta) {
     if (compile_done) {
         auto compile_result = compile_tr->get();
@@ -41,9 +32,8 @@ void EmulGlue::_process(float delta) {
     }
 }
 
-bool EmulGlue::start_compile(const String _ino_path) {
+bool EmulGlue::compile(const String _ino_path) {
 
-    constexpr auto paths_exist = [](auto... t) { return (... && std::filesystem::exists(t)); };
     if (compile_tr) {
         Godot::print("Already compiling!");
         return false;
@@ -54,6 +44,7 @@ bool EmulGlue::start_compile(const String _ino_path) {
     std::filesystem::path smce_home = "/home/ruthgerd/Sources/SmartcarEmul/cmake-build-debug";
     std::filesystem::path b_conf_path = "/home/ruthgerd/board_config.json";
 
+    constexpr auto paths_exist = [](auto... t) { return (... && std::filesystem::exists(t)); };
     if (!paths_exist(smce_home, b_conf_path, ino_path)) {
         Godot::print("paths dont exist");
         return false;
@@ -72,8 +63,35 @@ bool EmulGlue::start_compile(const String _ino_path) {
       return ret;
     });
 
-
-
     return true;
+}
+
+bool EmulGlue::write_uart_n(String msg, unsigned int bus) {
+    if (!bus_exists(bus))
+        return false;
+
+    auto& ubus = board.first.uart_buses[bus];
+    std::scoped_lock lk{ubus.rx_mutex};
+
+    auto buf = msg.utf8();
+    auto view = std::string_view{buf.get_data(), static_cast<size_t>(buf.length())};
+
+    auto size = ubus.rx.size();
+    ubus.rx.resize(ubus.rx.size() + view.size());
+
+    std::memcpy(&*ubus.rx.begin() + size, view.data(), view.size());
+    return true;
+}
+
+String EmulGlue::get_uart_buf_n(unsigned int bus) {
+    if (!bus_exists(bus))
+        return {};
+    auto ret = std::string();
+    auto& ubus = board.first.uart_buses[bus];
+    std::scoped_lock lk{ubus.rx_mutex};
+    ret.resize(ubus.rx.size());
+    std::memcpy(ret.data(), ubus.rx.data(), ubus.rx.size());
+
+    return ret.c_str();
 }
 } // namespace godot

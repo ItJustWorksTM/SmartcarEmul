@@ -27,8 +27,8 @@ size = Vector2( 100, 100 )
 
 [sub_resource type="BakedLightmapData" id=8]
 bounds = AABB( -53.1959, -42.3172, -51.5777, 106.392, 84.6345, 103.155 )
-cell_space_transform = Transform( 4, 0, 0, 0, 4, 0, 0, 0, 4, 212.784, 169.269, 206.311 )
-cell_subdiv = 10
+cell_space_transform = Transform( 0.298954, 0, 0, 0, 0.298954, 0, 0, 0, 0.298954, 15.9031, 12.6509, 15.4193 )
+cell_subdiv = 6
 octree = PoolByteArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255 )
 
 [sub_resource type="BoxShape" id=7]
@@ -76,7 +76,7 @@ bake_extents = Vector3( 53.1959, 42.3172, 51.5777 )
 light_data = SubResource( 8 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( -0.950814, -0.081296, 0.298905, 0.190486, 0.607483, 0.771155, -0.244272, 0.790162, -0.562117, 0.364094, 23.7573, -12.7083 )
+transform = Transform( -0.996588, -0.0825155, -0.0018232, -0.0011138, -0.00864233, 0.999962, -0.0825281, 0.996552, 0.00852094, 0.364094, 23.7573, -54.6055 )
 light_energy = 0.81
 light_indirect_energy = 2.7
 light_specular = 0.29
