@@ -42,10 +42,10 @@ class EmulGlue : public Node {
 
 
         register_signal<EmulGlue>("compile_done", "successful", GODOT_VARIANT_TYPE_BOOL, "message", GODOT_VARIANT_TYPE_STRING);
-        register_signal<EmulGlue>("board_started");
-        register_signal<EmulGlue>("board_resumed");
-        register_signal<EmulGlue>("board_paused");
-        register_signal<EmulGlue>("board_stopped");
+        register_signal<EmulGlue>("board_started", Dictionary());
+        register_signal<EmulGlue>("board_resumed", Dictionary());
+        register_signal<EmulGlue>("board_paused", Dictionary());
+        register_signal<EmulGlue>("board_stopped", Dictionary());
 
 
     }
@@ -64,9 +64,9 @@ class EmulGlue : public Node {
     bool write_uart_n(String msg, unsigned int bus);
 
     String get_uart_buf_n(unsigned int bus);
-    void pause_board() { if (ino_runtime.is_running()) ino_runtime.pause_now(); }
-    void resume_board() { if (ino_runtime.is_running()) ino_runtime.resume(); }
-
+    void pause_board() { ino_runtime.pause_now(); }
+    void resume_board() { ino_runtime.resume(); }
+    void reset_board() {}
 };
 
 } // namespace godot
