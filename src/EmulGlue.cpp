@@ -1,4 +1,5 @@
 #include "gdnative/EmulGlue.hxx"
+#include <Ref.hpp>
 
 namespace godot {
 void EmulGlue::_init() { Godot::print("EmulGlue initted"); }
@@ -41,6 +42,7 @@ void EmulGlue::_process(float delta) {
 }
 
 bool EmulGlue::start_compile(const String _ino_path) {
+
     constexpr auto paths_exist = [](auto... t) { return (... && std::filesystem::exists(t)); };
     if (compile_tr) {
         Godot::print("Already compiling!");

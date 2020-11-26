@@ -1,6 +1,7 @@
 #include "gdnative/gdexample.hxx"
 #include "gdnative/EmulGlue.hxx"
 #include "gdnative/components/AnalogRayCast.hxx"
+#include "gdnative/Refr.hxx"
 
 extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
     godot::Godot::gdnative_init(o);
@@ -16,6 +17,6 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
     godot::register_class<godot::GDExample>();
     godot::register_class<godot::EmulGlue>();
     godot::register_class<godot::AnalogRayCast>();
-
+    godot::register_class<godot::Refr>();
 }
 

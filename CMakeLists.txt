@@ -50,6 +50,7 @@ set (RANGES_PREFER_REAL_CONCEPTS ON CACHE BOOL "")
 set (RANGES_DEEP_STL_INTEGRATION ON CACHE BOOL "")
 add_subdirectory (thirdparty/range-v3)
 
+
 add_custom_target (TestTag)
 include (CTest)
 include (Catch)
@@ -59,17 +60,20 @@ include (BoostDLL)
 
 add_subdirectory (modules)
 
+add_library(smartcar_emul SHARED)
+
 set (GODOT_HEADERS thirdparty/godot-cpp/godot_headers thirdparty/godot-cpp/include thirdparty/godot-cpp/include/core thirdparty/godot-cpp/include/gen)
 
 if (WIN32)
-    set (SCONS_PLATFORM "windows")
+    set (SCONS_PLATFORM windows)
 elseif (UNIX AND NOT APPLE)
-    set (SCONS_PLATFORM "linux")
+    set (SCONS_PLATFORM linux)
 elseif (APPLE)
-    set (SCONS_PLATFORM "osx")
+    set (SCONS_PLATFORM osx)
 else()
-    message( FATAL_ERROR "Platform not supported" )
+    message( FATAL_ERROR "Platform not supported")
 endif()
+
 
 
 
@@ -84,9 +88,19 @@ add_custom_target(godot_headers
         COMMAND scons --cache-force -C ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp platform=${SCONS_PLATFORM} target=${SCONS_TARGET} generate_bindings=yes -j8 use_custom_api_file=yes custom_api_file=${API_JSON}
 )
 
-add_library(smartcar_emul SHARED)
+if (UNIX)
+    set (RELEASE_LINKER_OPTIONS -s)
+    target_link_options(smartcar_emul PUBLIC "$<$<CONFIG:DEBUG>:${RELEASE_LINKER_OPTIONS}>")
+endif()
 
-target_sources(smartcar_emul PRIVATE src/gdlibrary.cpp src/EmulGlue.cpp src/gdexample.cpp src/util.cpp src/components/AnalogRayCast.cpp)
+target_sources(smartcar_emul PRIVATE
+        src/gdlibrary.cpp
+        src/EmulGlue.cpp
+        src/gdexample.cpp
+        src/util.cpp
+        src/components/AnalogRayCast.cpp
+        src/Refr.cpp
+)
 target_include_directories(smartcar_emul PUBLIC ${GODOT_HEADERS})
 
 target_link_libraries(smartcar_emul smartcar_emul_deps ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp/bin/libgodot-cpp.${SCONS_PLATFORM}.${SCONS_TARGET}.64${CMAKE_STATIC_LIBRARY_SUFFIX})

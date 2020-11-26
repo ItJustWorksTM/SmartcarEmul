@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Overlay.gd" type="Script" id=1]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="."]
+margin_left = 130.0
+margin_top = 55.0
+margin_right = 636.0
+margin_bottom = 260.0
+
+[node name="LineEdit" type="LineEdit" parent="."]
+margin_left = 156.0
+margin_top = 173.0
+margin_right = 598.0
+margin_bottom = 212.0
+
+[node name="Label" type="Label" parent="."]
+margin_left = 160.02
+margin_top = 63.0818
+margin_right = 428.02
+margin_bottom = 152.082
