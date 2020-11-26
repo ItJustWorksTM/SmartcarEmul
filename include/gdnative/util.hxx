@@ -13,6 +13,7 @@ T* gd_cast(const godot::Object* variant) {
     return godot::Object::cast_to<T>(variant);
 }
 
+
 std::optional<std::pair<BoardData, BoardInfo>> make_config(const std::filesystem::path& path);
 
 #endif // SMARTCAR_EMUL_UTIL_HXX

@@ -13,5 +13,7 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
     godot::Godot::nativescript_init(handle);
     godot::register_class<godot::EmulGlue>();
     godot::register_class<godot::AnalogRayCast>();
+    godot::register_class<godot::CustomIter>();
+
 }
 

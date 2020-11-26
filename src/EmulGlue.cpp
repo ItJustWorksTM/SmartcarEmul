@@ -22,9 +22,9 @@ void EmulGlue::_process(float delta) {
                               compile_result);
         if (err) {
             Godot::print(fmt::format("Compile failed: {}", err->what()).c_str());
-            emit_signal("compile_done", false, fmt::format("Compile failed: {}", err->what()).c_str());
+            emit_signal("compile_finished", false, fmt::format("Compile failed: {}", err->what()).c_str());
         } else {
-            emit_signal("compile_done", true, "Something happened!");
+            emit_signal("compile_finished", true, "Something happened!");
         }
 
         compile_done = false;
@@ -36,6 +36,11 @@ bool EmulGlue::compile(const String _ino_path) {
 
     if (compile_tr) {
         Godot::print("Already compiling!");
+        return false;
+    }
+
+    if (ino_runtime.is_initialized()) {
+        Godot::print("Current runtime still active");
         return false;
     }
 
@@ -66,8 +71,8 @@ bool EmulGlue::compile(const String _ino_path) {
     return true;
 }
 
-bool EmulGlue::write_uart_n(String msg, unsigned int bus) {
-    if (!bus_exists(bus))
+bool EmulGlue::write_uart_n(unsigned int bus, String msg) {
+    if (bus > board.first.uart_buses.size())
         return false;
 
     auto& ubus = board.first.uart_buses[bus];
@@ -84,14 +89,42 @@ bool EmulGlue::write_uart_n(String msg, unsigned int bus) {
 }
 
 String EmulGlue::get_uart_buf_n(unsigned int bus) {
-    if (!bus_exists(bus))
+    if (bus > board.first.uart_buses.size())
         return {};
-    auto ret = std::string();
     auto& ubus = board.first.uart_buses[bus];
     std::scoped_lock lk{ubus.rx_mutex};
+    if (ubus.rx.empty())
+        return {};
+    auto ret = std::string();
     ret.resize(ubus.rx.size());
     std::memcpy(ret.data(), ubus.rx.data(), ubus.rx.size());
 
     return ret.c_str();
 }
+
+void EmulGlue::set_digital_n(unsigned int pin, bool value) {
+    if (pin > board.first.digital_pin_values.size())
+        return;
+    board.first.digital_pin_values[pin].store(value);
+}
+
+Variant EmulGlue::get_digital_n(unsigned int pin) {
+    if (pin > board.first.digital_pin_values.size())
+        return {};
+    return board.first.digital_pin_values[pin].load();
+}
+
+void EmulGlue::set_analog_n(unsigned int pin, uint8_t value) {
+    if (pin > board.first.analog_pin_values.size())
+        return;
+    board.first.digital_pin_values[pin].store(value);
+}
+
+Variant EmulGlue::get_analog_n(unsigned int pin) {
+    if (pin > board.first.analog_pin_values.size())
+        return {};
+    return board.first.analog_pin_values[pin].load();
+}
+
+
 } // namespace godot

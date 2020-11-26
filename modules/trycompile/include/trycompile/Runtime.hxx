@@ -67,6 +67,7 @@ struct SketchRuntime {
     bool clear();
 
     [[nodiscard]] constexpr bool is_running() const noexcept { return status == Status::running; }
+    [[nodiscard]] constexpr bool is_initialized() const noexcept { return status != Status::uninitialized; }
 
     template <class Invocable, class... Args>
     void interrupt(Invocable&& invocable, Args&&... args) requires std::invocable<Invocable, decltype(args)...> {
