@@ -124,6 +124,7 @@ jobs:
           export CXX=/usr/local/opt/llvm/bin/clang++;
           cmake --build build --target godot_headers
           cmake --build build --target smartcar_emul
+          ls -R
 #          cmake --build build --target smartcar_emul_tests
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
