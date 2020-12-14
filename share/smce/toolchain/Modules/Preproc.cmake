@@ -62,6 +62,7 @@ function (install_libs ARDUINOCLI_PATH)
     execute_process (COMMAND ${ARDUINOCLI_PATH} core update-index --config-file "${CMAKE_SOURCE_DIR}/arduino-cli.yaml")
     execute_process (COMMAND "${ARDUINOCLI_PATH}" core install arduino:avr --config-file "${CMAKE_SOURCE_DIR}/arduino-cli.yaml")
     execute_process (COMMAND ${ARDUINOCLI_PATH} lib install Servo --config-file "${CMAKE_SOURCE_DIR}/arduino-cli.yaml")
+    execute_process (COMMAND ${ARDUINOCLI_PATH} lib install MQTT --config-file "${CMAKE_SOURCE_DIR}/arduino-cli.yaml")
     execute_process (COMMAND ${ARDUINOCLI_PATH} lib install VL53L0X --config-file "${CMAKE_SOURCE_DIR}/arduino-cli.yaml")
 endfunction ()
 

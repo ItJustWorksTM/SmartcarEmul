@@ -29,6 +29,7 @@ target_sources (Ardrivo INTERFACE
         src/Entrypoint.cxx
         src/HardwareSerial.cxx
         src/ProtectedAlloc.cxx
+        src/MQTTClient.cxx
         src/SPI.cxx
         src/Servo.cxx
         src/Stream.cxx
@@ -39,7 +40,8 @@ target_link_libraries (Ardrivo INTERFACE
         stdpolyfills::stdpolyfills
         range-v3::range-v3
         fmt::fmt-header-only
-        Microsoft.GSL::GSL)
+        Microsoft.GSL::GSL
+        paho-mqtt3c)
 
 add_executable (TestsArdrivo test/CatchMain.cxx test/Servo.cxx test/SPI.cxx test/Wire.cxx)
 set_target_properties (TestsArdrivo PROPERTIES LINKER_LANGUAGE CXX)
