@@ -50,19 +50,23 @@ set (RANGES_PREFER_REAL_CONCEPTS ON CACHE BOOL "")
 set (RANGES_DEEP_STL_INTEGRATION ON CACHE BOOL "")
 add_subdirectory (thirdparty/range-v3)
 
+
 add_custom_target (TestTag)
 include (CTest)
 include (Catch)
-include (SetupUrho3D)
 include (SmartcarLib)
 include (StdPolyfills)
 include (BoostDLL)
 
 add_subdirectory (modules)
 
+add_library(smartcar_emul STATIC)
+
+target_link_libraries(smartcar_emul PUBLIC smartcar_emul_deps)
+
 execute_process (
-        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/share" "${CMAKE_BINARY_DIR}/share"
-        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/include/ardpolyfills" "${CMAKE_BINARY_DIR}/share/smce/toolchain/include/ardpolyfills"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/share" "${CMAKE_BINARY_DIR}/share"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/include/ardpolyfills" "${CMAKE_BINARY_DIR}/share/smce/toolchain/include/ardpolyfills"
         COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/share/smce/toolchain/lib")
 
 add_library (ArduinoRuntime SHARED include/ardpolyfills/SMCE__dll.hxx)
@@ -71,7 +75,7 @@ add_custom_command (TARGET ArduinoRuntime POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:ArduinoRuntime>" "${CMAKE_BINARY_DIR}/share/smce/toolchain/lib/"
         COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_LINKER_FILE:ArduinoRuntime>" "${CMAKE_BINARY_DIR}/share/smce/toolchain/lib/"
         COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/share/smce/toolchain/libraries"
-        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/thirdparty/smartcar_shield" "${CMAKE_BINARY_DIR}/share/smce/toolchain/libraries/smartcar_shield")
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/thirdparty/smartcar_shield" "${CMAKE_BINARY_DIR}/share/smce/toolchain/libraries/smartcar_shield")
 file (GENERATE
         OUTPUT "${CMAKE_BINARY_DIR}/share/smce/toolchain/Modules/ArduinoRuntimeLocation.cmake"
         CONTENT "set (ARDUINO_RUNTIME_FILENAME $<TARGET_FILE_NAME:ArduinoRuntime>)\nset (ARDUINO_RUNTIME_LINK_FILENAME $<TARGET_LINKER_FILE_NAME:ArduinoRuntime>)")
@@ -81,72 +85,31 @@ add_dependencies(TestTag ArduinoRuntime)
 add_library (smartcar_emul_deps INTERFACE)
 target_link_libraries (smartcar_emul_deps INTERFACE
         Boost::dll
-        fmt::fmt
+        fmt::fmt-header-only
         Microsoft.GSL::GSL
         magic_enum::magic_enum
         nameof::nameof
         range-v3::range-v3
-        Urho3D::Urho3D
         stdpolyfills::stdpolyfills
         TryCompile
         ConfigLoader
         RegMoniker)
 
-add_executable (smartcar_emul src/main.cxx)
-target_include_directories (smartcar_emul PRIVATE include thirdparty/inih)
-target_link_libraries (smartcar_emul PRIVATE smartcar_emul_deps Urho3D-rapidjson)
+target_include_directories (smartcar_emul PUBLIC include thirdparty/inih thirdparty/rapidjson/include)
 target_compile_options (smartcar_emul PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/permissive->)
 add_dependencies (smartcar_emul ArduinoRuntime)
 
-target_sources (smartcar_emul PRIVATE
-        include/app/UrhoApp.hxx
-        src/app/UrhoApp.cxx
-        include/components/Registry.hxx
-        include/components/MovableCamera.hxx
-        src/components/MovableCamera.cxx
-        include/UrhoUtility.hxx
-        src/gui/TorchMenu.cxx
-        include/gui/TorchMenu.hxx
-        src/components/EmulGlue.cxx
-        include/components/EmulGlue.hxx
-        include/gui/TorchEvents.hxx
-        include/components/SimpleVehicle.hxx
-        src/components/SimpleVehicle.cxx
-        src/components/Servo.cxx
-        include/components/Servo.hxx
-        src/components/WheelServo.cxx
-        include/components/WheelServo.hxx
-        src/components/PerfectGyroscopeI2CSensor.cxx
-        include/components/PerfectGyroscopeI2CSensor.hxx
-        src/components/LaserCaster.cxx
-        include/components/LaserCaster.hxx
-        src/components/PerfectDistanceI2CSensor.cxx
-        include/components/PerfectDistanceI2CSensor.hxx
-        src/components/PerfectDistanceAnalogSensor.cxx
-        include/components/PerfectDistanceAnalogSensor.hxx)
-
-file (COPY ${CMAKE_SOURCE_DIR}/share DESTINATION ${CMAKE_BINARY_DIR})
+file (COPY ${PROJECT_SOURCE_DIR}/share DESTINATION ${CMAKE_BINARY_DIR})
 
 set (SMCE_SHARE ${CMAKE_BINARY_DIR}/share/smce)
-
-if (EXISTS ${URHO3D_HOME}/share/Urho3D/Resources)
-    set (URHO3D_RESOURCES ${URHO3D_HOME}/share/Urho3D/Resources)
-else ()
-    set (URHO3D_RESOURCES ${URHO3D_HOME}/bin)
-endif ()
-
-execute_process (
-        COMMAND "${CMAKE_COMMAND}" -E make_directory "${SMCE_SHARE}/Resources"
-        COMMAND "${CMAKE_COMMAND}" -E copy_directory "${URHO3D_RESOURCES}/Autoload" "${SMCE_SHARE}/Resources/Autoload"
-        COMMAND "${CMAKE_COMMAND}" -E copy_directory "${URHO3D_RESOURCES}/CoreData" "${SMCE_SHARE}/Resources/CoreData"
-        COMMAND "${CMAKE_COMMAND}" -E copy_directory "${URHO3D_RESOURCES}/Data" "${SMCE_SHARE}/Resources/Data")
 
 add_executable (smartcar_emul_tests test/sanity.cxx)
 add_dependencies(smartcar_emul_tests TestTag)
 target_link_libraries (smartcar_emul_tests PRIVATE
         smartcar_emul_deps
-        Catch2)
-
+        Catch2
+)
 
 catch_discover_tests (smartcar_emul_tests)
 add_custom_command(TARGET smartcar_emul_tests POST_BUILD COMMAND ctest --output-on-failure)
+

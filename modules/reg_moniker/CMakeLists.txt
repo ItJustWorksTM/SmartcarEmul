@@ -20,7 +20,7 @@ add_library (RegMoniker INTERFACE)
 
 target_include_directories (RegMoniker INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/include/reg_moniker
-        ${CMAKE_SOURCE_DIR}/include)
+        ${PROJECT_SOURCE_DIR}/include)
 target_sources (RegMoniker INTERFACE
         include/reg_moniker/DeviceMap.hxx)
 target_compile_definitions (RegMoniker INTERFACE)

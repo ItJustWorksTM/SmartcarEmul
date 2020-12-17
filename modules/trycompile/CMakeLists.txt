@@ -19,9 +19,9 @@
 add_library (TryCompile INTERFACE)
 
 target_include_directories (TryCompile INTERFACE
-        ${CMAKE_SOURCE_DIR}/thirdparty/Boost.DLL/include
+        ${PROJECT_SOURCE_DIR}/thirdparty/Boost.DLL/include
         ${CMAKE_CURRENT_SOURCE_DIR}/include/trycompile
-        ${CMAKE_SOURCE_DIR}/include)
+        ${PROJECT_SOURCE_DIR}/include)
 target_sources (TryCompile INTERFACE
         include/trycompile/Source.hxx
         include/trycompile/Object.hxx

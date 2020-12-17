@@ -16,8 +16,9 @@ add_library(ConfigLoader INTERFACE)
 
 target_include_directories(ConfigLoader INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/include/configloader
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/thirdparty)
+        ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/thirdparty
+        ${PROJECT_SOURCE_DIR}/thirdparty/rapidjson/include)
 
 target_sources(ConfigLoader INTERFACE
         include/configloader/BoardConf.hxx
@@ -33,7 +34,6 @@ target_link_libraries(ConfigLoader INTERFACE
         fmt::fmt
         nameof::nameof
         range-v3::range-v3
-        Urho3D-rapidjson
         Boost::predef)
 
 add_executable(TestsConfigLoader test/load.cxx test/BoardConf.cxx test/VehicleConf.cxx)

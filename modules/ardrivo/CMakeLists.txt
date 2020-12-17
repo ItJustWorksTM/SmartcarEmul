@@ -19,8 +19,8 @@ add_library (Ardrivo INTERFACE)
 
 target_include_directories (Ardrivo INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/include/ardrivo
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/include/ardpolyfills)
+        ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/include/ardpolyfills)
 target_sources (Ardrivo INTERFACE
         include/ardrivo/BoardDataDef.hxx
         include/ardrivo/Entrypoint.hxx
