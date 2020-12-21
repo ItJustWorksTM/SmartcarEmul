@@ -1,4 +1,3 @@
-
 name: Emul C++ CI
 on: [push, pull_request]
 jobs:
@@ -28,12 +27,9 @@ jobs:
         run: mkdir build && pushd build && cmake -G Ninja -DSMCE_STDLIB_DEBUG=${{ matrix.stdlib_debug }} .. && popd
       - name: build
         run: pwd && cmake --build build
-    #      - name: test
-    #        run: pushd build && ctest && popd
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
-
 
   build-windows: # This one needs to be split-off because we want to test both GCC and Clang in Ubuntu
     runs-on: windows-latest
@@ -79,7 +75,6 @@ jobs:
             export CXX=/usr/local/opt/llvm/bin/clang++;
           fi
           cmake --build build
-
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
