@@ -17,18 +17,14 @@
  */
 
 #include <concepts>
-#include <fstream>
 #include <iterator>
 #include <optional>
 #include <nameof.hpp>
 #include <range/v3/algorithm/transform.hpp>
 #include <range/v3/algorithm/for_each.hpp>
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wambiguous-reversed-operator"
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/schema.h>
-#pragma clang diagnostic pop
 
 #include "BoardConf.hxx"
 #include "ConfHelper.hxx"

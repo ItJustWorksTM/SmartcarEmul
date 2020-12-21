@@ -25,9 +25,7 @@ target_sources(ConfigLoader INTERFACE
         src/BoardConf.cxx
         src/BoardConfSchema.cxx
         include/configloader/ProgramOptions.hxx
-        src/ProgramOptions.cxx
-        include/configloader/VehicleConf.hxx
-        src/VehicleConf.cxx)
+        src/ProgramOptions.cxx)
 
 target_link_libraries(ConfigLoader INTERFACE
         stdpolyfills::stdpolyfills
@@ -36,7 +34,7 @@ target_link_libraries(ConfigLoader INTERFACE
         range-v3::range-v3
         Boost::predef)
 
-add_executable(TestsConfigLoader test/load.cxx test/BoardConf.cxx test/VehicleConf.cxx)
+add_executable(TestsConfigLoader test/load.cxx test/BoardConf.cxx)
 
 set_target_properties(TestsConfigLoader PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(TestsConfigLoader ConfigLoader Catch2)
